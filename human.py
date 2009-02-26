@@ -23,7 +23,7 @@ class Player(object):
         log("Your turn")
         t0 = time.time()
         themove = raw_input("Enter your move [abcdefg]: ").strip()
-        t = time.time() - t
+        t = time.time() - t0
         log("You took %.2f seconds to think" % t)
         return (themove, t, self.get_state())
 
