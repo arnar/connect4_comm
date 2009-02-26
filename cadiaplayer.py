@@ -40,7 +40,11 @@ class GGPlayer(object):
         return mv
 
     def state(self):
-        return self._cmd("(state)")
+        log("PIPE: sending '(state)'")
+        self.p.stdin.write("(state)\r\n")
+        ret = [self.p.stdout.readline().strip() for i in range(43)]
+        log("PIPE: read 43 lines of state")
+        return ret
 
 class Player(object):
 
