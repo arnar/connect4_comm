@@ -88,7 +88,7 @@ class Player(object):
         t = time.time() - t0
         log("Search finished in %.2f seconds" % t)
         assert mv.startswith("(drop ")
-        themove = "abcdefg"[int(mv[1:-1].split()[1])]
+        themove = " abcdefg"[int(mv[1:-1].split()[1])]
         log("Found move: " + themove)
         log("Making the move on cadiaplayer side...")
         if self.gp.role == 'white':
