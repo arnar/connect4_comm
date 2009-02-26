@@ -58,7 +58,7 @@ class Player(object):
         log("Getting state...")
         st = self.gp.state()
         log("...done -> " + st)
-        return st
+        return repr(st)
     
     state = property(get_state)
 
