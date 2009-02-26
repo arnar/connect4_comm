@@ -7,8 +7,8 @@ def log(str):
 
 class Player(object):
 
-    def __init__(self, exe, role):
-        log('Get ready to play...')
+    def __init__(self, role):
+        log('Get ready to play, you are the %s player.' % role)   
 
     def get_state(self):
         return "human"
@@ -51,8 +51,8 @@ class Player(object):
         log("You have been terminated!")
         return 0
 
-def main(exe, role):
-    p = Player(exe, role)
+def main(role):
+    p = Player(role)
     server = SimpleXMLRPCServer(("", 8000))
     server.register_instance(p)
     server.serve_forever()
