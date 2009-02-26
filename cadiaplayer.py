@@ -1,5 +1,6 @@
 from SimpleXMLRPCServer import SimpleXMLRPCServer
-import urllib
+#import urllib
+import subprocess
 
 import time
 
@@ -16,12 +17,15 @@ class GGPlayer(object):
     def __init__(self, url, role, game, start, play):
         self.url = url
         self.role = role
+        self.p = subprocess.Popen(url, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         status = self._cmd("(start id %s (%s) %d %d)" % (self.role, game, start, play))
         assert status == "READY"
 
     def _cmd(self, cmd):
-        f = urllib.urlopen(self.url, cmd)
-        return f.read().strip()
+        #f = urllib.urlopen(self.url, cmd)
+        #return f.read().strip()
+        self.p.stdin.write(cmd + "\r\n")
+        return self.p.stdout.readline()
 
     def play(self, moves=None):
         if moves is None:
@@ -44,10 +48,6 @@ class Player(object):
         self.last_opponent_move = None
         self.gp = GGPlayer(url, role, THEGAME, 5, 5)
         log('...done')
-
-    def _cmd(self, cmd):
-        f = urllib.urlopen(self.url, cmd)
-        return f.read().strip()
 
     def get_state(self):
         #log("Getting state...")
