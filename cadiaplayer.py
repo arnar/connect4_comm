@@ -57,15 +57,13 @@ class Player(object):
     def get_state(self):
         log("Getting state...")
         output = self.gp.state()
-        rows = [['.' for col in range(7)] for row in range(6)]
-        it = iter(output)
-        for col in range(7):
-            for row in range(6):
-                mark = it.next()[-2]
-                rows[row][col] = {'b': '.', 'x': 'B', 'o': 'R'}[mark]
-        ctrl = it.next()[1:-1].split()[1]
+        cells = []
+        for line in output[:-1]:
+            mark = line[-2]
+            cells.append({'b': '.', 'x': 'B', 'o': 'R'}[mark])
+        ctrl = output[-1][1:-1].split()[1]
         ctrl = {'black': 'R', 'white': 'B'}[ctrl]
-        st = ctrl + ''.join(map(lambda row: ''.join(row), rows))
+        st = ctrl + ''.join(cells)
         log("...done -> " + st)
         return st
     
