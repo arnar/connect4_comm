@@ -51,9 +51,10 @@ class Player(object):
         log('...done')
 
     def get_state(self):
-        #log("Getting state...")
-        #log("...done -> " + st)
-        return "TODO"
+        log("Getting state...")
+        st = self.gp.state()
+        log("...done -> " + st)
+        return st
     
     state = property(get_state)
 
