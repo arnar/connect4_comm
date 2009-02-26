@@ -64,6 +64,7 @@ class Player(object):
         for line in output[:-1]:
             mark = line[-2]
             cells.append({'b': '.', 'x': 'B', 'o': 'R'}[mark])
+        cells = [cells[j*6+i] for i in range(6) for j in range(7)]  # transpose
         ctrl = output[-1][1:-1].split()[1]
         ctrl = {'black': 'R', 'white': 'B'}[ctrl]
         st = ctrl + ''.join(cells)
