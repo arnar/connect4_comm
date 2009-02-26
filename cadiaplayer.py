@@ -1,6 +1,6 @@
 from SimpleXMLRPCServer import SimpleXMLRPCServer
-#import urllib
 import subprocess
+import os
 
 import time
 
@@ -14,18 +14,19 @@ def log(str):
 
 class GGPlayer(object):
     
-    def __init__(self, url, role, game, start, play):
-        self.url = url
+    def __init__(self, exe, role, game, start, play):
         self.role = role
-        self.p = subprocess.Popen(url, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        self.p = subprocess.Popen(exe, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                 cwd=os.path.dirname(exe))
         status = self._cmd("(start id %s (%s) %d %d)" % (self.role, game, start, play))
         assert status == "READY"
 
     def _cmd(self, cmd):
-        #f = urllib.urlopen(self.url, cmd)
-        #return f.read().strip()
+       log("PIPE: sending %r" % cmd)
         self.p.stdin.write(cmd + "\r\n")
-        return self.p.stdout.readline()
+        ret = self.p.stdout.readline()
+       log("PIPE: got %r" % ret)
+       return ret.strip()
 
     def play(self, moves=None):
         if moves is None:
@@ -43,10 +44,10 @@ class GGPlayer(object):
 
 class Player(object):
 
-    def __init__(self, url, role):
+    def __init__(self, exe, role):
         log('Initializing player...')
         self.last_opponent_move = None
-        self.gp = GGPlayer(url, role, THEGAME, 5, 5)
+        self.gp = GGPlayer(exe, role, THEGAME, 5, 5)
         log('...done')
 
     def get_state(self):
@@ -109,8 +110,8 @@ class Player(object):
     def terminate(self):
         return 0
 
-def main(url, role):
-    p = Player(url, role)
+def main(exe, role):
+    p = Player(exe, role)
     server = SimpleXMLRPCServer(("", 8000))
     server.register_instance(p)
     server.serve_forever()
