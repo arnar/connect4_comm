@@ -123,7 +123,7 @@ class Player(object):
     depth = property(get_depth, set_depth)
 
     def terminate(self):
-        self.p.terminate()
+        self.gp.terminate()
         return 0
 
 def main(exe, role):
