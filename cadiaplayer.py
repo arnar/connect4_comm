@@ -46,6 +46,9 @@ class GGPlayer(object):
         log("PIPE: read 43 lines of state")
         return ret
 
+    def terminate(self):
+        self.p.terminate()
+
 class Player(object):
 
     def __init__(self, exe, role):
@@ -120,6 +123,7 @@ class Player(object):
     depth = property(get_depth, set_depth)
 
     def terminate(self):
+        self.p.terminate()
         return 0
 
 def main(exe, role):
