@@ -22,11 +22,11 @@ class GGPlayer(object):
         assert status == "READY"
 
     def _cmd(self, cmd):
-       log("PIPE: sending %r" % cmd)
+        log("PIPE: sending %r" % cmd)
         self.p.stdin.write(cmd + "\r\n")
         ret = self.p.stdout.readline()
-       log("PIPE: got %r" % ret)
-       return ret.strip()
+        log("PIPE: got %r" % ret)
+        return ret.strip()
 
     def play(self, moves=None):
         if moves is None:
