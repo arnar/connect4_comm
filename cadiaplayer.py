@@ -16,10 +16,12 @@ class GGPlayer(object):
     
     def __init__(self, exe, role, game, start, play):
         self.role = role
+        self.game = game
+        self.start_clock = start
+        self.play_clock = play
         self.p = subprocess.Popen(exe, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                  cwd=os.path.dirname(exe))
-        status = self._cmd("(start id %s (%s) %d %d)" % (self.role, game, start, play))
-        assert status == "READY"
+        self.reset()
 
     def _cmd(self, cmd):
         log("PIPE: sending %r" % cmd)
@@ -48,6 +50,10 @@ class GGPlayer(object):
 
     def terminate(self):
         self.p.terminate()
+
+    def reset(self):
+        status = self._cmd("(start id %s (%s) %d %d)" % (self.role, self.game, self.start_clock, self.play_clock))
+        assert status == "READY"
 
 class Player(object):
 
@@ -107,7 +113,8 @@ class Player(object):
         raise Exception("cannot retract cadiaplayer")
 
     def reset(self):
-        raise Exception("cannot reset cadiaplayer")
+        self.gp.reset()
+        return 0
 
     def get_depth(self):
         return 0
