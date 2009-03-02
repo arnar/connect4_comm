@@ -8,11 +8,12 @@ def log(str):
 
 class Player(object):
 
-    def __init__(self, exe):
+    def __init__(self, exe, depth):
         log('Initializing player...')
         self.p = pexpect.spawn(exe)
         self.p.expect("> ")
         self.reset()
+        self.depth = depth
         log('...done')
 
     def _cmd(self, cmd):
@@ -55,7 +56,6 @@ class Player(object):
     def reset(self):
         log("Resetting")
         self._cmd("i")
-        self.depth = 4
         return self.get_state()
 
     def get_depth(self):
@@ -83,9 +83,9 @@ class Player(object):
         self._cmd("q")
         return 0
 
-def main(player_exe):
-    p = Player(player_exe)
-    server = SimpleXMLRPCServer(("", 8000))
+def main(player_exe, port='8000', depth="4"):
+    p = Player(player_exe, int(depth))
+    server = SimpleXMLRPCServer(("", int(port)))
     server.register_instance(p)
     server.serve_forever()
 
